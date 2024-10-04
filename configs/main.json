@@ -1,0 +1,109 @@
+{
+  "chat_config": {
+    "chat_model": "finnlp-challenge-finetuned-llama3-8b-task1",
+    "lora": true,
+    "lora_path": "lora_head",
+    "lora_base_model": "meta-llama/Meta-Llama-3-8B-Instruct",
+    "chat_model_type": "instruction",
+    "chat_model_inference_engine": "vllm",
+    "chat_system_message": "You are a helpful assistant.",
+    "chat_parameters": {
+      "temperature": 0.6
+    },
+    "chat_max_new_token": 1000,
+    "chat_request_timeout": 1000,
+    "chat_vllm_endpoint": "http://0.0.0.0:8000",
+    "tensor_parallel_size": 2
+  },
+  "emb_config": {
+    "emb_model_name": "text-embedding-3-large",
+    "request_endpoint": "https://api.openai.com/v1/embeddings",
+    "emb_size": 3072,
+    "embedding_timeout": 600
+  },
+  "env_config": {
+    "trading_symbols": [
+      "BTC-USD"
+    ],
+    "warmup_start_time": "2023-02-11",
+    "warmup_end_time": "2023-03-10",
+    "test_start_time": "2023-03-11",
+    "test_end_time": "2023-04-04",
+    "momentum_window_size": 3,
+    "env_data_path": {
+      "BTC-USD": "data/btc_train.json"
+    }
+  },
+  "portfolio_config": {
+    "trading_symbols": [
+      "BTC-USD"
+    ],
+    "type": "single-asset",
+    "look_back_window_size": 3
+  },
+  "agent_config": {
+    "agent_name": "finmem_agent",
+    "trading_symbols": [
+      "BTC-USD"
+    ],
+    "character_string": {
+      "BTC-USD": "You are an experienced trading manager in cryptocurrency trading at a mainstream investment firm. You accumulate a lot of information about Bitcoin USD (BTC-USD) in the following sectors, so you are especially good at trading them: 1) Trading: This involves the buying and selling of Bitcoin and other cryptocurrencies on various exchanges and platforms. It's a highly active area with significant price volatility. 2) Investment: Bitcoin is often treated as a digital asset by investors looking for portfolio diversification. It's increasingly included in investment strategies alongside traditional assets. 3) Payment Solutions: Bitcoin serves as a digital currency, facilitating transactions without the need for traditional banking systems. It's used in cross-border transactions due to its decentralized nature. 4) Blockchain Technology: The underlying technology of Bitcoin is blockchain, a decentralized ledger that records all transactions securely and transparently. This technology is pivotal in many fintech innovations beyond just cryptocurrencies. From December 2022 to April 2023, Bitcoin (BTC-USD) experienced significant volatility in its price. In December 2022, Bitcoin had been trading around $16,800 but saw a gradual decline through the month, touching lows near $16,500. The cryptocurrency began to recover in January 2023, surpassing $21,000 by the end of the month, spurred by renewed investor interest and a favorable macroeconomic outlook. February saw a slight retreat, with prices oscillating around the $20,000 mark. March marked a more robust recovery, with Bitcoin breaking past $25,000, benefiting from global economic cues and inflation data. April continued the upward trend, with Bitcoin reaching highs around $27,000. Overall, the period was marked by recovery from earlier lows, with Bitcoin showing resilience in the face of ongoing economic uncertainties.As of April 2023, analysts anticipated a cautiously optimistic outlook for Bitcoin for the remainder of the year. They forecasted that Bitcoin's price could experience continued volatility but remain on an upward trajectory if the macroeconomic environment stabilize. However, they also warned of potential downward pressures from regulatory crackdowns and technological vulnerabilities."
+    },
+    "top_k": 5,
+    "memory_db_config": {
+      "memory_db_endpoint": "http://localhost:6333",
+      "memory_importance_upper_bound": 100.0,
+      "memory_importance_score_update_step": 18.0,
+      "trading_symbols": [
+        "BTC-USD"
+      ],
+      "short": {
+        "db_name": "short",
+        "importance_init_val": 50.0,
+        "decay_recency_factor": 3.0,
+        "decay_importance_factor": 0.92,
+        "clean_up_recency_threshold": 0.05,
+        "clean_up_importance_threshold": 5.0,
+        "jump_upper_threshold": 55.0
+      },
+      "mid": {
+        "db_name": "mid",
+        "importance_init_val": 60.0,
+        "decay_recency_factor": 90.0,
+        "decay_importance_factor": 0.96,
+        "clean_up_recency_threshold": 0.05,
+        "clean_up_importance_threshold": 5.0,
+        "jump_lower_threshold": 55.0,
+        "jump_upper_threshold": 85.0
+      },
+      "long": {
+        "db_name": "long",
+        "importance_init_val": 90.0,
+        "decay_recency_factor": 365.0,
+        "decay_importance_factor": 0.96,
+        "clean_up_recency_threshold": 0.05,
+        "clean_up_importance_threshold": 5.0,
+        "jump_lower_threshold": 85.0
+      },
+      "reflection": {
+        "db_name": "reflection",
+        "importance_init_val": 80.0,
+        "decay_recency_factor": 365.0,
+        "decay_importance_factor": 0.98,
+        "clean_up_recency_threshold": 0.05,
+        "clean_up_importance_threshold": 5.0,
+        "similarity_threshold": 0.95
+      }
+    }
+  },
+  "meta_config": {
+    "run_name": "exp",
+    "momentum_window_size": 3,
+    "warmup_checkpoint_save_path": "results/exp/catMemo/BTC-USD/warmup_checkpoint",
+    "warmup_output_save_path": "results/exp/catMemo/BTC-USD/warmup_output",
+    "test_checkpoint_save_path": "results/exp/catMemo/BTC-USD/test_checkpoint",
+    "test_output_save_path": "results/exp/catMemo/BTC-USD/test_output",
+    "result_save_path": "results/exp/catMemo/BTC-USD/final_result",
+    "log_save_path": "results/exp/catMemo/BTC-USD/log"
+  }
+}

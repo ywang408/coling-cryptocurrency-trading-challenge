@@ -1,0 +1,42 @@
+class ChatModelConfig {
+    chat_model: String
+    lora: Boolean = false
+    lora_path: String| Null = null
+    lora_base_model: String|Null = null
+    chat_model_type: Null|String(this is "completion"|"instruction"|"chat")
+    chat_model_inference_engine: String(this is "vllm")
+    chat_system_message: Null|String = null
+    chat_endpoint: Null|String
+    chat_template_path: Null|String
+    chat_parameters: Mapping
+}
+
+llama3_1_instruct_8b: ChatModelConfig = new {
+    chat_model = "meta-llama/Meta-Llama-3.1-8B-Instruct"
+    chat_model_type = "instruction"
+    chat_model_inference_engine = "vllm"
+    chat_endpoint = null
+    chat_template_path = null
+    chat_system_message = "You are a helpful assistant."
+    chat_parameters = new Mapping {}
+  }
+
+catMemoExample: ChatModelConfig = new {
+  chat_model = "finnlp-challenge-finetuned-llama3-8b-task1"
+  lora = true
+  lora_path = "lora_head"
+  lora_base_model = "meta-llama/Meta-Llama-3-8B-Instruct"
+  chat_model_type = "instruction"
+  chat_model_inference_engine = "vllm"
+  chat_endpoint = null
+  chat_template_path = null
+  chat_system_message = "You are a helpful assistant."
+  chat_parameters = new Mapping {}
+}
+
+
+
+chat_model_dict = new Mapping {
+    ["llama-3.1-8b-instruct"] = llama3_1_instruct_8b
+    ["catMemo"] = catMemoExample
+  }
