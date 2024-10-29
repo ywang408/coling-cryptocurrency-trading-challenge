@@ -154,7 +154,15 @@ def calculate_max_drawdown(daily_returns):
     for r in daily_returns:
         cumulative_returns.append(cumulative_returns[-1] * (1 + r))
 
-    max_drawdown = (max(cumulative_returns) - min(cumulative_returns))/ max(cumulative_returns)
+    peak = cumulative_returns[0]
+    max_drawdown = 0
+
+    for r in cumulative_returns:
+        if r > peak:
+            peak = r
+        drawdown = (peak - r) / peak
+        if drawdown > max_drawdown:
+            max_drawdown = drawdown
 
     return max_drawdown
 
