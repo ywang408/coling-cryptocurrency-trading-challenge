@@ -141,17 +141,20 @@ def calculate_sharpe_ratio(Rp, Rf, sigma_p, price_list):
 
 
 def calculate_max_drawdown(daily_returns):
-    cumulative_returns = [1]
-    cumulative_returns.extend(cumulative_returns[-1] * (1 + r) for r in daily_returns)
-    peak = cumulative_returns[0]
-    max_drawdown = 0
+    """
+    Calculate the maximum drawdown of a portfolio.
 
-    for r in cumulative_returns:
-        if r > peak:
-            peak = r
-        drawdown = (peak - r) / peak
-        if drawdown > max_drawdown:
-            max_drawdown = drawdown
+    Parameters:
+    daily_returns (list): List of daily returns.
+
+    Returns:
+    float: Maximum drawdown.
+    """
+    cumulative_returns = [1]
+    for r in daily_returns:
+        cumulative_returns.append(cumulative_returns[-1] * (1 + r))
+
+    max_drawdown = (max(cumulative_returns) - min(cumulative_returns))/ max(cumulative_returns)
 
     return max_drawdown
 
