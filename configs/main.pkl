@@ -99,7 +99,7 @@ agent_config = new {
     top_k = config.top_k
     memory_db_config = memory_db
     export_queried_infos = true
-    export_path = "results/\(config.run_name)/\(config.chat_model)/\(env_config.trading_symbols.join("_"))/infos"
+    export_path = "training/data/\(config.chat_model)/\(env_config.trading_symbols.join("_"))"
     }
 
 // meta config
