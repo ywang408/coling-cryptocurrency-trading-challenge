@@ -21,14 +21,14 @@ hidden config = new meta.MetaConfig {
     momentum_window_size = 3
     tensor_parallel_size = 2
     embedding_model = "text-embedding-3-large"
-    chat_model = "catMemo"
+    chat_model = "qwen-25-1b-lora1"
     chat_vllm_endpoint = "http://0.0.0.0:8000"
     chat_parameters = new Mapping {
         ["temperature"] = 0.6 
     }
 }
 
-// chat config
+// chat config 
 hidden chat_temp = chat_models.chat_model_dict[config.chat_model].toMap().toDynamic()
 hidden chat_param = chat_temp.chat_parameters.toMap().toDynamic()
 hidden config_chat_parameters = config.chat_parameters.toMap().toDynamic()
@@ -98,6 +98,8 @@ agent_config = new {
     character_string = character_string_temp  
     top_k = config.top_k
     memory_db_config = memory_db
+    export_queried_infos = true
+    export_path = "results/\(config.run_name)/\(config.chat_model)/\(env_config.trading_symbols.join("_"))/infos"
     }
 
 // meta config
@@ -134,5 +136,4 @@ meta_config = (meta_config_temp) {
     test_output_save_path = "results/\(run_name)/\(config.chat_model)/\(env_config.trading_symbols.join("_"))/test_output"
     result_save_path = "results/\(run_name)/\(config.chat_model)/\(env_config.trading_symbols.join("_"))/final_result"
     log_save_path = "results/\(run_name)/\(config.chat_model)/\(env_config.trading_symbols.join("_"))/log"
-    info_save_path = "results/\(run_name)/\(config.chat_model)/\(env_config.trading_symbols.join("_"))/infos"
 }
