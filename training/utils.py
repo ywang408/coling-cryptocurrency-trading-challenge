@@ -1,7 +1,7 @@
 import json
 import pandas as pd
 
-def format_investment_decision_text(asset_key, json_file='info.json', output_csv='investment_questions.csv'):
+def format_investment_decision_text(symbol, json_file='info.json', output_csv='investment_questions.csv'):
     with open(json_file, 'r') as file:
         data = json.load(file)
 
@@ -9,7 +9,7 @@ def format_investment_decision_text(asset_key, json_file='info.json', output_csv
 
     # Loop through each date in the JSON file
     for date, date_data in data.items():
-        btc_data = date_data.get(asset_key, {})
+        btc_data = date_data.get(symbol, {})
 
         # Extract relevant information
         short_memories_content = btc_data.get("short_memories", {}).get("content", [])
@@ -25,7 +25,7 @@ def format_investment_decision_text(asset_key, json_file='info.json', output_csv
 
         # Construct the complete text with preset sentences and extracted data for the current date
         formatted_text = (
-            f"Date: {date}\n\n"
+            f"The ticker of the cryptocurrency to be analyzed is {symbol} and the current date is {date}"
             "Given the information, can you make an investment decision?\n"
             "please consider the mid-term information, the long-term information, the reflection-term information only when they are available. "
             "If there no such information, directly ignore the impact for absence such information.\n"
