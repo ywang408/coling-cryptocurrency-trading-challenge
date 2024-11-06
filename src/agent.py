@@ -457,6 +457,55 @@ class FinMemAgent:
             access_counter_update_func=self.memory_access_update,
         )
 
+    def append_queried_infos(self, output_path: str, date: str, memories: dict, market_info: OneDayMarketInfo):
+        """Append queried memories, their IDs, and market data for a specific date to a JSON file."""
+        os.makedirs(os.path.dirname(output_path), exist_ok=True)
+        
+        # Read existing data
+        if os.path.exists(output_path):
+            with open(output_path, 'rb') as f:
+                try:
+                    existing_data = orjson.loads(f.read())
+                except orjson.JSONDecodeError:
+                    existing_data = {}
+        else:
+            existing_data = {}
+        
+        # For each symbol, collect memories and their IDs
+        memory_data = {}
+        for symbol, mem_data in memories.items():
+            memory_data[symbol] = {
+                "short_memories": {
+                    "content": mem_data["short_memory"],
+                    "ids": mem_data["short_memory_id"]
+                },
+                "mid_memories": {
+                    "content": mem_data["mid_memory"],
+                    "ids": mem_data["mid_memory_id"]
+                },
+                "long_memories": {
+                    "content": mem_data["long_memory"],
+                    "ids": mem_data["long_memory_id"]
+                },
+                "reflection_memories": {
+                    "content": mem_data["reflection_memory"],
+                    "ids": mem_data["reflection_memory_id"]
+                },
+                "market_data": {
+                    "momentum": market_info.cur_momentum.get(symbol),
+                    "future_price_diff": market_info.cur_future_price_diff.get(symbol)
+                }
+            }
+        
+        # Append new data
+        existing_data[date] = memory_data
+        
+        # Write updated data
+        with open(output_path, 'wb') as f:
+            f.write(orjson.dumps(existing_data, option=orjson.OPT_INDENT_2 | orjson.OPT_SERIALIZE_NUMPY))
+        
+        logger.info(f"Appended memories, IDs, and market data for {date} to {output_path}")
+
     def step(
         self, market_info: OneDayMarketInfo, run_mode: RunMode, task_type: TaskType
     ) -> None:
@@ -529,6 +578,23 @@ class FinMemAgent:
             mid_recency_init_func=self.mid_recency_init,
             long_recency_init_func=self.long_recency_init,
         )
+
+        # Query memories
+        queried_memories = self._query_memories()
+
+        # Append queried memories for this date to the JSON file
+        if self.agent_config.get("export_queried_infos", True):
+            prefix = f"{run_mode.value}_"
+            export_path = os.path.join(
+                self.agent_config["export_path"],
+                f"{prefix}queried_infos.json"
+            )
+            self.append_queried_infos(
+                export_path, 
+                str(market_info.cur_date), 
+                queried_memories,
+                market_info
+            )
 
     def __eq__(self, another_agent: "FinMemAgent") -> bool:
         return (

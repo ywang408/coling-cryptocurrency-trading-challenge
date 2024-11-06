@@ -134,4 +134,5 @@ meta_config = (meta_config_temp) {
     test_output_save_path = "results/\(run_name)/\(config.chat_model)/\(env_config.trading_symbols.join("_"))/test_output"
     result_save_path = "results/\(run_name)/\(config.chat_model)/\(env_config.trading_symbols.join("_"))/final_result"
     log_save_path = "results/\(run_name)/\(config.chat_model)/\(env_config.trading_symbols.join("_"))/log"
+    info_save_path = "results/\(run_name)/\(config.chat_model)/\(env_config.trading_symbols.join("_"))/infos"
 }
